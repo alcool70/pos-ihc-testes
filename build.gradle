@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:28.1-jre'
+    implementation 'com.google.inject:guice:4.2.3'
+    implementation 'org.easymock:easymock:3.6'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
+    implementation 'io.github.cdimascio:dotenv-java:2.2.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'com.applitools:eyes-selenium-java3:3.191.0'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:4.3.1'
+
+    testImplementation 'io.cucumber:cucumber-java8:6.8.1'
+    testImplementation 'io.cucumber:cucumber-junit:6.8.1'
+    testImplementation 'io.cucumber:cucumber-guice:6.8.1'
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            environment 'CUCUMBER_PUBLISH_QUIET', true
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--tags', 'not @skip', '--glue', 'alcool70', 'src/test/resources']
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
