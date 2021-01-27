@@ -1,36 +1,51 @@
 package alcool70.pages;
 
+import alcool70.infra.TipoMensagem;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContatoPage {
 
+    //    @FindBy(xpath = "/html/body/section/div[2]/div[3]/div[3]/a")
     @FindBy(xpath = ".//a[text()='Contato' and @class='btn btn-primary']")
-    public static WebElement buttonContato;
+    List<WebElement> buttonContato;
 
     @FindBy(id = "nome")
-    public static WebElement inputNome;
+    WebElement inputNome;
 
     @FindBy(id = "email")
-    public static WebElement inputEmail;
+    WebElement inputEmail;
 
     @FindBy(name = "tipo")
-    public static List<WebElement> radioTipoMensagem;
+    List<WebElement> radioTipoMensagem;
 
     @FindBy(id = "idade")
-    public static WebElement selectIdade;
+    WebElement selectIdade;
 
     @FindBy(id = "mensagem")
-    public static WebElement textareaMensagem;
+    WebElement textareaMensagem;
 
     @FindBy(xpath = "//button[contains(text(),'Enviar sua mensagem')]")
-    public static WebElement buttonEnviarSuaMensagem;
+    WebElement buttonEnviarSuaMensagem;
+
+    @FindBy(xpath = ".//div[@class='alert alert-dismissable alert-success']/span")
+    WebElement toast;
+
+    public ContatoPage(WebDriver drv) {
+        AjaxElementLocatorFactory factory = new AjaxElementLocatorFactory(drv, 100);
+        PageFactory.initElements(factory, this);
+    }
 
     public void clicarBotaoContato() {
-        buttonContato.click();
+//        BaseSteps.verificarPresenca(buttonContato);
+        buttonContato.get(0).click();
     }
 
     public void preencherNome(String nome) {
@@ -49,12 +64,14 @@ public class ContatoPage {
     }
 
     public void escolherTipoMensagem(TipoMensagem tipo) {
-        for (WebElement e : radioTipoMensagem) {
-            String value = e.getAttribute("value");
-            if (value.equalsIgnoreCase(tipo.name())) {
-                e.click();
-            }
-        }
+        radioTipoMensagem
+                .stream()
+                .filter(
+                        it -> it.getAttribute("value").equalsIgnoreCase(tipo.name())
+                )
+                .collect(Collectors.toList())
+                .get(0)
+                .click();
     }
 
     public void escolherIdade(String idade) {
@@ -62,8 +79,12 @@ public class ContatoPage {
     }
 
     public void enviarMensagemDeContato() {
+        // buttonEnviarSuaMensagem.click();
         inputEmail.submit();
-//        buttonEnviarSuaMensagem.click();
+    }
+
+    public boolean toastText(String str) {
+        return toast.getText().equalsIgnoreCase(str);
     }
 
 }

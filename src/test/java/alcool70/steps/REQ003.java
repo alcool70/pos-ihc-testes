@@ -1,72 +1,47 @@
 package alcool70.steps;
 
+import alcool70.infra.TipoMensagem;
 import alcool70.pages.ContatoPage;
-import alcool70.pages.TipoMensagem;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java8.Pt;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class REQ003 implements Pt {
+public class REQ003 extends BaseSteps {
 
-    private WebDriver driver;
-    private ContatoPage steps;
+    ContatoPage page;
 
     public REQ003() {
-        // BeforeAll
-        Before(() -> {
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
 
-            driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.MINUTES);
-            driver.manage().window().maximize();
+        page = new ContatoPage(driver);
 
-            steps = PageFactory.initElements(driver, ContatoPage.class);
-        });
 
-        // AfterAll
-        After(() -> {
-            if (driver != null)
-                driver.quit();
-        });
-
-        Dado("que estou na página inicial do sistema", () -> {
-            driver.get("https://calculadora.diegoquirino.net");
-//            EyesSingleton.simpleCheck(driver, "Página Inicial", "pagina.inicial");
-        });
-
-        Dado("^acesso a opção (.*)$", (String opcao) -> {
-            if (opcao.equalsIgnoreCase("contato")) {
-                steps.clicarBotaoContato();
+        Dado("^acesso a opção \"([^\"]*)\"$", (String opcao) -> {
 //                EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato", "pagina.contato");
-            }
+            if (opcao.equalsIgnoreCase("contato"))
+                page.clicarBotaoContato();
+
         });
 
-        Quando("preencho os dados no formulário de contato", (DataTable tabela) -> {
+        Quando("preencho com dados válidos o formulário", (DataTable tabela) -> {
             Map<String, String> dados = tabela.asMap(String.class, String.class);
 
-            steps.preencherNome(dados.get("nome"));
-            steps.preencherEmail(dados.get("email"));
-            steps.escolherTipoMensagem(TipoMensagem.valueOf(dados.get("tipo_msg")));
-            steps.escolherIdade(dados.get("idade"));
-            steps.preencherMensagem(dados.get("texto_msg"));
+            page.preencherNome(dados.get("nome"));
+            page.preencherEmail(dados.get("email"));
+            page.escolherTipoMensagem(TipoMensagem.valueOf(dados.get("tipo")));
+            page.escolherIdade(dados.get("idade"));
+            page.preencherMensagem(dados.get("mensagem"));
 
 //            EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato - preenchida", "pagina.contato");
         });
 
-        Quando("envio o formulário de contato", () -> steps.enviarMensagemDeContato());
+        Quando("submeto o formulário de contato", () -> page.enviarMensagemDeContato());
 
-        Então("^verifico que a mensagem \"(.*)\" foi exibida na página$", (String mensagem) -> {
+        Então("^verifico que a mensagem \"([^\"]*)\" foi exibida na página$", (String mensagem) -> {
 //            EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato - resultado", "pagina.contato");
-//            assertTrue(driver.getPageSource().contains(mensagem));
-            assertTrue(driver.getPageSource().contains("Mensagem de DÚVIDA por usuário de idade MENOR QUE 18 ANOS foi enviada com sucesso!"));
+            assertFalse(page.toastText(mensagem));
+//            assertTrue(steps.toastText("Mensagem de DÚVIDA por usuário de idade MENOR QUE 18 ANOS foi enviada com sucesso!"));
         });
     }
 }
