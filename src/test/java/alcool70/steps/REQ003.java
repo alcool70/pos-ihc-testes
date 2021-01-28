@@ -20,11 +20,10 @@ public class REQ003 implements Pt {
 
         page = new ContatoPage(driver);
 
-        Dado("^que eu acesso a opção \"([^\"]*)\"$", (String opcao) -> {
+        // TODO: possibilidade de polimorfismo
+        Dado("^que eu acesso a opção \"contato\"$", () -> {
             // EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato", "pagina.contato");
-            if (opcao.equalsIgnoreCase("contato"))
-                page.clicarBotaoContato();
-
+            page.clicarBotaoContato();
         });
 
         Quando("preencho com dados válidos o formulário", (DataTable tabela) -> {

@@ -23,13 +23,12 @@ public class BaseSteps implements Pt {
                 "--disable-in-process-stack-traces", "--disable-logging",
                 "--disable-dev-shm-usage", "--log-level=5", "--output=/dev/null");
 
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
         // BeforeAll
         Before(() -> {
-
-            driver = new ChromeDriver(options);
-            driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
             // EyesSingleton.simpleCheck(driver, "Página Inicial", "pagina.inicial");
             driver.get("https://calculadora.diegoquirino.net");
         });

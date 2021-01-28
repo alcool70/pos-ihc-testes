@@ -20,6 +20,12 @@ public class REQ001 implements Pt {
 
         page = new ClientePage(driver);
 
+        // TODO: possibilidade de polimorfismo
+        Dado("^que eu acesso a opção \"calcular desconto\"$", () -> {
+            // EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato", "pagina.contato");
+            page.acessarCalcularDesconto();
+        });
+
         Dado("^seleciono o produto$", page::acesseProduto);
 
         Quando("^preencho com dados do cliente$", (DataTable tabela) -> {
