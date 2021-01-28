@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
@@ -13,11 +12,10 @@ import java.util.stream.Collectors;
 
 public class ContatoPage {
 
-    //    @FindBy(xpath = "/html/body/section/div[2]/div[3]/div[3]/a")
     @FindBy(xpath = ".//a[text()='Contato' and @class='btn btn-primary']")
-    List<WebElement> buttonContato;
+    WebElement buttonContato;
 
-    @FindBy(id = "nome")
+    @FindBy(xpath = "//*[@id='nome']")
     WebElement inputNome;
 
     @FindBy(id = "email")
@@ -38,14 +36,14 @@ public class ContatoPage {
     @FindBy(xpath = ".//div[@class='alert alert-dismissable alert-success']/span")
     WebElement toast;
 
-    public ContatoPage(WebDriver drv) {
-        AjaxElementLocatorFactory factory = new AjaxElementLocatorFactory(drv, 100);
-        PageFactory.initElements(factory, this);
+    public ContatoPage(WebDriver driver) {
+//        AjaxElementLocatorFactory factory = new AjaxElementLocatorFactory(driver, 100);
+        // PageFactory.initElements(driver, ContatoPage.class);
+        PageFactory.initElements(driver, this);
     }
 
     public void clicarBotaoContato() {
-//        BaseSteps.verificarPresenca(buttonContato);
-        buttonContato.get(0).click();
+        buttonContato.click();
     }
 
     public void preencherNome(String nome) {

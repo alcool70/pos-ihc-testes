@@ -3,22 +3,25 @@ package alcool70.steps;
 import alcool70.infra.TipoMensagem;
 import alcool70.pages.ContatoPage;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java8.Pt;
+import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class REQ003 extends BaseSteps {
+public class REQ003 implements Pt {
 
-    ContatoPage page;
+    private ContatoPage page;
 
-    public REQ003() {
+    public REQ003(BaseSteps bs) {
+
+        WebDriver driver = bs.getDriver();
 
         page = new ContatoPage(driver);
 
-
-        Dado("^acesso a opção \"([^\"]*)\"$", (String opcao) -> {
-//                EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato", "pagina.contato");
+        Dado("^que eu acesso a opção \"([^\"]*)\"$", (String opcao) -> {
+            // EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato", "pagina.contato");
             if (opcao.equalsIgnoreCase("contato"))
                 page.clicarBotaoContato();
 
@@ -31,17 +34,20 @@ public class REQ003 extends BaseSteps {
             page.preencherEmail(dados.get("email"));
             page.escolherTipoMensagem(TipoMensagem.valueOf(dados.get("tipo")));
             page.escolherIdade(dados.get("idade"));
-            page.preencherMensagem(dados.get("mensagem"));
+            page.preencherMensagem(dados.get("msg"));
 
-//            EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato - preenchida", "pagina.contato");
+            // EyesSingleton.simpleCheck(driver,
+            //         "Página Enviar Mensagem de Contato - preenchida",
+            //         "pagina.contato");
         });
 
-        Quando("submeto o formulário de contato", () -> page.enviarMensagemDeContato());
+        Quando("submeto o formulário de contato", page::enviarMensagemDeContato);
 
         Então("^verifico que a mensagem \"([^\"]*)\" foi exibida na página$", (String mensagem) -> {
-//            EyesSingleton.simpleCheck(driver, "Página Enviar Mensagem de Contato - resultado", "pagina.contato");
+            // EyesSingleton.simpleCheck(driver,
+            //         "Página Enviar Mensagem de Contato - resultado",
+            //         "pagina.contato");
             assertFalse(page.toastText(mensagem));
-//            assertTrue(steps.toastText("Mensagem de DÚVIDA por usuário de idade MENOR QUE 18 ANOS foi enviada com sucesso!"));
         });
     }
 }

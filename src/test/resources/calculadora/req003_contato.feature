@@ -4,8 +4,7 @@
 Funcionalidade: REQ003 - Mensagem de Contato
 
   Contexto: Acesso à página de Mensagem de Contato
-    Dado que estou na página inicial do sistema
-    E acesso a opção "contato"
+    Dado que eu acesso a opção "contato"
 
   @sucesso
   Esquema do Cenario: Enviar contato com sucesso (fluxo básico)
@@ -19,16 +18,19 @@ Funcionalidade: REQ003 - Mensagem de Contato
     Então verifico que a mensagem "Sucesso no envio da mensagem" foi exibida na página
 
     Exemplos:
-      | nome   | email            | tipo       | idade              | mensagem             |
-      | Maria  | maria@gmail.com  | Dúvida     | Menor que 18 anos  | Dúvida de Maria      |
-      | Carlos | carlos@gmail.com | Dúvida     | Entre 18 e 60 anos | Dúvida de Carlos     |
-      | Alison | Alison@gmail.com | Dúvida     | Acima de 60 anos   | Dúvida de Alison     |
-      | Diego  | diego@gmail.com  | Sugestão   | Menor que 18 anos  | Sugestão de Diego    |
-      | José   | jose@gmail.com   | Sugestão   | Entre 18 e 60 anos | Sugestão de José     |
-      | Manoel | manoel@gmail.com | Sugestão   | Acima de 60 anos   | Sugestão de Manoel   |
-      | Bianca | Bianca@gmail.com | Reclamação | Menor que 18 anos  | Reclamação de Bianca |
-      | Thiago | thiago@gmail.com | Reclamação | Entre 18 e 60 anos | Reclamaçao de Thiago |
-      | Ana    | ana@gmail.com    | Reclamação | Acima de 60 anos   | Reclamação de Ana    |
+      | nome  | email             | tipo   | idade             | mensagem        |
+      | Maria | maria@yopmail.com | DÚVIDA | Menor que 18 anos | Dúvida de Maria |
+#      | Carlos | carlos@yopmail.com | DÚVIDA     | Entre 18 e 29 anos  | Dúvida de Carlos |
+#      | João   | joao@yopmail.com   | DÚVIDA     | Entre 30 e 64 anos  | Dúvida de João   |
+#      | Alison | alison@yopmail.com | DÚVIDA     | A partir de 65 anos | Dúvida de Alison |
+#      | Maria  | maria@yopmail.com  | SUGESTÃO   | Menor que 18 anos   | Dúvida de Maria  |
+#      | Carlos | carlos@yopmail.com | SUGESTÃO   | Entre 18 e 29 anos  | Dúvida de Carlos |
+#      | João   | joao@yopmail.com   | SUGESTÃO   | Entre 30 e 64 anos  | Dúvida de João   |
+#      | Alison | alison@yopmail.com | SUGESTÃO   | A partir de 65 anos | Dúvida de Alison |
+#      | Maria  | maria@yopmail.com  | RECLAMAÇÃO | Menor que 18 anos   | Dúvida de Maria  |
+#      | Carlos | carlos@yopmail.com | RECLAMAÇÃO | Entre 18 e 29 anos  | Dúvida de Carlos |
+#      | João   | joao@yopmail.com   | RECLAMAÇÃO | Entre 30 e 64 anos  | Dúvida de João   |
+#      | Alison | alison@yopmail.com | RECLAMAÇÃO | A partir de 65 anos | Dúvida de Alison |
 
   @falha
   Cenário: Enviar formulário sem preencher os dados

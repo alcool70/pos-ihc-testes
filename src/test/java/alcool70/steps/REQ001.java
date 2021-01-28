@@ -2,25 +2,25 @@ package alcool70.steps;
 
 import alcool70.pages.ClientePage;
 import io.cucumber.datatable.DataTable;
-import org.openqa.selenium.support.PageFactory;
+import io.cucumber.java8.Pt;
+import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsStringIgnoringCase;
 
-public final class REQ001 extends BaseSteps {
+public class REQ001 implements Pt {
 
-    ClientePage page;
+    private ClientePage page;
 
-    public REQ001() {
+    public REQ001(BaseSteps bs) {
 
-        page = PageFactory.initElements(driver, ClientePage.class);
+        WebDriver driver = bs.getDriver();
 
-        Dado("que estou na página inicial do sistema", () -> {
-        });
+        page = new ClientePage(driver);
 
-        Dado("^seleciono o produto$", () -> page.acesseProduto());
+        Dado("^seleciono o produto$", page::acesseProduto);
 
         Quando("^preencho com dados do cliente$", (DataTable tabela) -> {
             Map<String, String> dados = tabela.asMap(String.class, String.class);
@@ -28,7 +28,7 @@ public final class REQ001 extends BaseSteps {
             page.informarQtdItem(dados.get("quantidade"));
         });
 
-        Quando("^calculo o desconto$", () -> page.calcularDesconto());
+        Quando("^calculo o desconto$", page::calcularDesconto);
 
         Então("^verifico se a mensagem foi exibida com sucesso$", () -> {
             assertThat(
